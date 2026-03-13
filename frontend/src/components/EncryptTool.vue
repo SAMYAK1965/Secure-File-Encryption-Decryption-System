@@ -1,10 +1,13 @@
+```vue
 <template>
 
 <div class="card p-4 shadow">
 
-<div class="dropzone mb-3"
-     @dragover.prevent
-     @drop.prevent="handleDrop">
+<div
+class="dropzone mb-3"
+@dragover.prevent
+@drop.prevent="handleDrop"
+>
 
 <h5>Drag Folder Here</h5>
 
@@ -28,7 +31,8 @@ class="form-control mt-3"
 <li
 v-for="(file,index) in selected"
 :key="index"
-class="list-group-item">
+class="list-group-item"
+>
 
 {{ file.webkitRelativePath || file.name }}
 
@@ -41,7 +45,9 @@ class="list-group-item">
 
 <button
 class="btn btn-primary mb-3"
-@click="uploadFolder">
+@click="uploadFolder"
+:disabled="!selected.length"
+>
 
 Encrypt Folder
 
@@ -51,7 +57,8 @@ Encrypt Folder
 <button
 v-if="downloadReady"
 class="btn btn-success"
-@click="downloadZip">
+@click="downloadZip"
+>
 
 Download Encrypted Folder
 
@@ -60,6 +67,7 @@ Download Encrypted Folder
 </div>
 
 </template>
+
 
 
 <script>
@@ -99,6 +107,13 @@ this.selected = Array.from(e.target.files)
 
 async uploadFolder(){
 
+if(!this.selected.length){
+
+alert("Please select a folder first")
+return
+
+}
+
 const formData = new FormData()
 
 for(let i=0;i<this.selected.length;i++){
@@ -107,14 +122,32 @@ formData.append("files",this.selected[i])
 
 }
 
+try{
+
 const res = await axios.post(
-"http://localhost:5000/encrypt-folder",
+
+"https://secure-file-encryption-decryption-system.onrender.com/encrypt-folder",
+
 formData,
-{ responseType:"blob" }
+
+{
+responseType:"blob",
+headers:{
+"Content-Type":"multipart/form-data"
+}
+}
+
 )
 
 this.zipBlob = res.data
 this.downloadReady = true
+
+}catch(error){
+
+console.error(error)
+alert("Encryption failed. Please check backend server.")
+
+}
 
 },
 
@@ -122,7 +155,9 @@ this.downloadReady = true
 downloadZip(){
 
 const url = window.URL.createObjectURL(
+
 new Blob([this.zipBlob])
+
 )
 
 const link = document.createElement("a")
@@ -145,6 +180,7 @@ link.remove()
 </script>
 
 
+
 <style>
 
 .dropzone{
@@ -158,3 +194,4 @@ background:#f8f9fa;
 }
 
 </style>
+```
