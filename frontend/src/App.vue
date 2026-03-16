@@ -5,15 +5,19 @@
 
     <EncryptTool />
 
+    <DecryptTool />
+
   </div>
 </template>
 
 <script>
 import EncryptTool from "./components/EncryptTool.vue"
+import DecryptTool from "./components/DecryptTool.vue"
 
 export default {
   components: {
-    EncryptTool
+    EncryptTool,
+    DecryptTool
   }
 }
 </script>

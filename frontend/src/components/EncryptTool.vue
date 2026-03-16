@@ -1,4 +1,3 @@
-```vue
 <template>
 
 <div class="card p-4 shadow">
@@ -194,4 +193,3 @@ background:#f8f9fa;
 }
 
 </style>
-```
