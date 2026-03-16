@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+instance/
+backend/uploads/
+backend/encrypted/
+backend/decrypted/
+backend/encrypted_output/
+*.zip
